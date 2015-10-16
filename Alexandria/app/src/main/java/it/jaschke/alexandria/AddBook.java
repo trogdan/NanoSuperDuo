@@ -10,6 +10,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +21,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.integration.android.SupportIntentIntegrator;
+
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
 import it.jaschke.alexandria.services.DownloadImage;
 
 
 public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String LOG_TAG = AddBook.class.getSimpleName();
     private static final String TAG = "INTENT_TO_SCAN_ACTIVITY";
     private EditText ean;
     private final int LOADER_ID = 1;
@@ -36,10 +42,44 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
     private String mScanFormat = "Format:";
     private String mScanContents = "Contents:";
+    private final Fragment mFragment;
 
+    private boolean handleBookNumber(String ean)
+    {
+        //catch isbn10 numbers
+        if(ean.length()==10 && !ean.startsWith("978")){
+            ean="978"+ean;
+        }
+        if(ean.length()<13){
+            clearFields();
+            return false;
+        }
+        //Once we have an ISBN, start a book intent
+        Intent bookIntent = new Intent(getActivity(), BookService.class);
+        bookIntent.putExtra(BookService.EAN, ean);
+        bookIntent.setAction(BookService.FETCH_BOOK);
+        getActivity().startService(bookIntent);
+        AddBook.this.restartLoader();
 
+        return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            String contents = result.getContents();
+            if (contents != null) {
+                if(!handleBookNumber(result.toString()))
+                    Log.w(LOG_TAG, "Failed to scan ISBN from barcode");
+            } else {
+                Log.e(LOG_TAG, "Failed to scan barcode");
+            }
+        }
+    }
 
     public AddBook(){
+        mFragment = this;
     }
 
     @Override
@@ -70,20 +110,8 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             @Override
             public void afterTextChanged(Editable s) {
                 String ean =s.toString();
-                //catch isbn10 numbers
-                if(ean.length()==10 && !ean.startsWith("978")){
-                    ean="978"+ean;
-                }
-                if(ean.length()<13){
-                    clearFields();
-                    return;
-                }
-                //Once we have an ISBN, start a book intent
-                Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.EAN, ean);
-                bookIntent.setAction(BookService.FETCH_BOOK);
-                getActivity().startService(bookIntent);
-                AddBook.this.restartLoader();
+                if(!handleBookNumber(ean))
+                    Log.w(LOG_TAG, "Failed to scan ISBN from barcode");
             }
         });
 
@@ -96,12 +124,19 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 // Hint: Use a Try/Catch block to handle the Intent dispatch gracefully, if you
                 // are using an external app.
                 //when you're done, remove the toast below.
-                Context context = getActivity();
-                CharSequence text = "This button should let you scan a book for its barcode!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                SupportIntentIntegrator integrator = new SupportIntentIntegrator(mFragment);
+                integrator.addExtra("SCAN_WIDTH", 640);
+                integrator.addExtra("SCAN_HEIGHT", 480);
+                integrator.addExtra("SCAN_MODE", "PRODUCT_MODE");
+                //customize the prompt message before scanning
+                integrator.addExtra("PROMPT_MESSAGE", R.string.scan_prompt);
+                try {
+                    integrator.initiateScan(IntentIntegrator.PRODUCT_CODE_TYPES);
+                }
+                catch(android.content.ActivityNotFoundException e)
+                {
+                    Log.e(LOG_TAG, "Error initiating scanning app: " + e.getMessage());
+                }
 
             }
         });
