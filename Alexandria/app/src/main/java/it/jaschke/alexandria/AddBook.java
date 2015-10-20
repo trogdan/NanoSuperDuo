@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -44,19 +43,19 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     private String mScanContents = "Contents:";
     private final Fragment mFragment;
 
-    private boolean handleBookNumber(String ean)
+    private boolean handleBookNumber(String isbn)
     {
         //catch isbn10 numbers
-        if(ean.length()==10 && !ean.startsWith("978")){
-            ean="978"+ean;
+        if(isbn.length()==10 && !isbn.startsWith("978")){
+            isbn="978"+isbn;
         }
-        if(ean.length()<13){
+        if(isbn.length()<13){
             clearFields();
             return false;
         }
         //Once we have an ISBN, start a book intent
         Intent bookIntent = new Intent(getActivity(), BookService.class);
-        bookIntent.putExtra(BookService.EAN, ean);
+        bookIntent.putExtra(BookService.EAN, isbn);
         bookIntent.setAction(BookService.FETCH_BOOK);
         getActivity().startService(bookIntent);
         AddBook.this.restartLoader();
@@ -70,7 +69,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         if (result != null) {
             String contents = result.getContents();
             if (contents != null) {
-                if(!handleBookNumber(result.toString()))
+                if(!handleBookNumber(contents))
                     Log.w(LOG_TAG, "Failed to scan ISBN from barcode");
             } else {
                 Log.e(LOG_TAG, "Failed to scan barcode");
