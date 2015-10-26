@@ -28,7 +28,7 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     {
     }
 
-    private void update_scores()
+    private void updateScores()
     {
         Intent service_start = new Intent(getActivity(), ScoreFetchService.class);
         getActivity().startService(service_start);
@@ -38,23 +38,22 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     {
         fragmentdate[0] = date;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
-        update_scores();
+        updateScores();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        final ListView score_list = (ListView) rootView.findViewById(R.id.scores_list);
+        final ListView scoreList = (ListView) rootView.findViewById(R.id.scores_list);
         mAdapter = new ScoreAdapter(getActivity(),null,0);
-        score_list.setAdapter(mAdapter);
+        scoreList.setAdapter(mAdapter);
         getLoaderManager().initLoader(SCORES_LOADER,null,this);
-        mAdapter.detail_match_id = MainActivity.selected_match_id;
-        score_list.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        mAdapter.mDetailMatchId = MainActivity.selected_match_id;
+        scoreList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ViewHolder selected = (ViewHolder) view.getTag();
-                mAdapter.detail_match_id = selected.match_id;
+                mAdapter.mDetailMatchId = selected.match_id;
                 MainActivity.selected_match_id = (int) selected.match_id;
                 mAdapter.notifyDataSetChanged();
             }

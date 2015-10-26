@@ -31,6 +31,8 @@ import barqsoft.footballscores.R;
 public class ScoreFetchService extends IntentService
 {
     public static final String LOG_TAG = ScoreFetchService.class.getSimpleName();
+    public static final String ACTION_DATA_UPDATED = "barqsoft.footballscores.app.ACTION_DATA_UPDATED";
+
     public ScoreFetchService()
     {
         super(ScoreFetchService.class.getSimpleName());
@@ -264,6 +266,7 @@ public class ScoreFetchService extends IntentService
             values.toArray(insert_data);
             inserted_data = mContext.getContentResolver().bulkInsert(
                     DatabaseContract.BASE_CONTENT_URI,insert_data);
+
 
             //Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(inserted_data));
         }

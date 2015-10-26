@@ -1,6 +1,7 @@
 package barqsoft.footballscores;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import barqsoft.footballscores.service.ScoreFetchService;
 
 /**
  * Created by yehya khaled on 2/27/2015.
@@ -39,6 +42,13 @@ public class PagerFragment extends Fragment
         }
         mPagerHandler.setAdapter(mPagerAdapter);
         mPagerHandler.setCurrentItem(MainActivity.current_fragment);
+
+        // Update the widget
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ScoreFetchService.ACTION_DATA_UPDATED)
+                .setPackage(getActivity().getPackageName());
+        getActivity().sendBroadcast(dataUpdatedIntent);
+
         return rootView;
     }
     private class PageAdapter extends FragmentStatePagerAdapter
