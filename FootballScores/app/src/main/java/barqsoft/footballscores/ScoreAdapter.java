@@ -26,6 +26,9 @@ public class ScoreAdapter extends CursorAdapter
     public static final int COL_MATCHTIME = 2;
     public double detail_match_id = 0;
     private String FOOTBALL_SCORES_HASHTAG = "#Football_Scores";
+    public static final String ACTION_DATA_UPDATED =
+            "barqsoft.footballscores.app.ACTION_DATA_UPDATED";
+
     public ScoreAdapter(Context context, Cursor cursor, int flags)
     {
         super(context,cursor,flags);
@@ -64,9 +67,8 @@ public class ScoreAdapter extends CursorAdapter
         if(mHolder.match_id == detail_match_id)
         {
             //Log.v(FetchScoreTask.LOG_TAG,"will insert extraView");
-
-            container.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-                    , ViewGroup.LayoutParams.MATCH_PARENT));
+            container.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
             TextView match_day = (TextView) v.findViewById(R.id.matchday_textview);
             match_day.setText(Utilities.getMatchDay(cursor.getInt(COL_MATCHDAY),
                     cursor.getInt(COL_LEAGUE)));
@@ -97,4 +99,16 @@ public class ScoreAdapter extends CursorAdapter
         return shareIntent;
     }
 
+    @Override
+    protected void onContentChanged() {
+        super.onContentChanged();
+        updateWidgets();
+    }
+
+    private void updateWidgets() {
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(mContext.getPackageName());
+        mContext.sendBroadcast(dataUpdatedIntent);
+    }
 }

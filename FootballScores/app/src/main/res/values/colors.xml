@@ -76,5 +76,18 @@
     <color name="red13">#FFCACA</color>
     <color name="red14">#FFE4E4</color>
 
+    <!-- using the "Lime" Material Palette -->
+    <color name="primary">#CDDC39</color>  <!-- 500 -->
+    <color name="primary_dark">#AFB42B</color>  <!-- 700 -->
+    <color name="primary_light">#F0F4C3</color> <!-- 100 -->
+
+    <!-- TODO -->
+    <color name="accent">#C6FF00</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+
+    <!-- our detail accent colors -->
+    <color name="detail_accent_pane_background">#455A64</color>
+    <color name="detail_accent_label">#90A4AE</color>
 
 </resources>

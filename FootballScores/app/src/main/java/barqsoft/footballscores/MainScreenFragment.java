@@ -23,7 +23,6 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     public ScoreAdapter mAdapter;
     public static final int SCORES_LOADER = 0;
     private String[] fragmentdate = new String[1];
-    private int last_selected_item = -1;
 
     public MainScreenFragment()
     {
@@ -34,6 +33,7 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
         Intent service_start = new Intent(getActivity(), ScoreFetchService.class);
         getActivity().startService(service_start);
     }
+
     public void setFragmentDate(String date)
     {
         fragmentdate[0] = date;
@@ -90,8 +90,9 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
             cursor.moveToNext();
         }
         //Log.v(FetchScoreTask.LOG_TAG,"Loader query: " + String.valueOf(i));
+
+        // Automatically calls notifyDataSetChanged
         mAdapter.swapCursor(cursor);
-        //mAdapter.notifyDataSetChanged();
     }
 
     @Override

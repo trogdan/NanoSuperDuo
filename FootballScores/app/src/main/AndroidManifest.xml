@@ -33,6 +33,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="barqsoft.footballscores.MainActivity" />
         </activity>
+        <receiver
+            android:name=".widget.ScoreWidgetProvider"
+            android:label="@string/title_widget_scores"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="barqsoft.footballscores.app.ACTION_DATA_UPDATED" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_scores" />
+        </receiver>
+        <service
+            android:name=".widget.ScoreWidgetRemoteViewsService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service android:name=".service.ScoreFetchService" />
     </application>
 
