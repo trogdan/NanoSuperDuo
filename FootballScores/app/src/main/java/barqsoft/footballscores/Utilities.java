@@ -1,5 +1,8 @@
 package barqsoft.footballscores;
 
+import android.content.Context;
+import java.util.HashMap;
+
 /**
  * Created by yehya khaled on 3/3/2015.
  */
@@ -11,16 +14,24 @@ public class Utilities
     public static final int PRIMERA_DIVISION = 358;
     public static final int BUNDESLIGA = 351;
 
+    public static final Context mContext = ScoresApplication.getAppContext();
+    private static HashMap<String, Integer> mTeamMap;
+
+    private static String getString(int id)
+    {
+        return mContext.getResources().getString(id);
+    }
+
     public static String getLeague(int league_num)
     {
         switch (league_num)
         {
-            case SERIE_A : return "Seria A";
-            case PREMIER_LEGAUE : return "Premier League";
-            case CHAMPIONS_LEAGUE : return "UEFA Champions League";
-            case PRIMERA_DIVISION : return "Primera Division";
-            case BUNDESLIGA : return "Bundesliga";
-            default: return "Not known League Please report";
+            case SERIE_A : return getString(R.string.utility_serie_a);
+            case PREMIER_LEGAUE : return getString(R.string.utility_premiere_league);
+            case CHAMPIONS_LEAGUE : return getString(R.string.utility_uefa_league);
+            case PRIMERA_DIVISION : return getString(R.string.utility_primera_division);
+            case BUNDESLIGA : return getString(R.string.utility_bundesliga);
+            default: return getString(R.string.utility_unknown_league);
         }
     }
 
@@ -30,28 +41,28 @@ public class Utilities
         {
             if (match_day <= 6)
             {
-                return "Group Stages, Matchday : 6";
+                return getString(R.string.utility_group_round);
             }
             else if(match_day == 7 || match_day == 8)
             {
-                return "First Knockout round";
+                return getString(R.string.utility_knockout_round);
             }
             else if(match_day == 9 || match_day == 10)
             {
-                return "QuarterFinal";
+                return getString(R.string.utility_quarterfinal_round);
             }
             else if(match_day == 11 || match_day == 12)
             {
-                return "SemiFinal";
+                return getString(R.string.utility_semifinal_round);
             }
             else
             {
-                return "Final";
+                return getString(R.string.utility_final_round);
             }
         }
         else
         {
-            return "Matchday : " + String.valueOf(match_day);
+            return getString(R.string.utility_matchday) + String.valueOf(match_day);
         }
     }
 
@@ -69,21 +80,27 @@ public class Utilities
 
     public static int getTeamCrestByTeamName (String teamname)
     {
-        if (teamname==null){return R.drawable.no_icon;}
-        switch (teamname)
-        { //This is the set of icons that are currently in the app. Feel free to find and add more
-            //as you go.
-            case "Arsenal London FC" : return R.drawable.arsenal;
-            case "Manchester United FC" : return R.drawable.manchester_united;
-            case "Swansea City" : return R.drawable.swansea_city_afc;
-            case "Leicester City" : return R.drawable.leicester_city_fc_hd_logo;
-            case "Everton FC" : return R.drawable.everton_fc_logo1;
-            case "West Ham United FC" : return R.drawable.west_ham;
-            case "Tottenham Hotspur FC" : return R.drawable.tottenham_hotspur;
-            case "West Bromwich Albion" : return R.drawable.west_bromwich_albion_hd_logo;
-            case "Sunderland AFC" : return R.drawable.sunderland;
-            case "Stoke City FC" : return R.drawable.stoke_city;
-            default: return R.drawable.no_icon;
+        if (mTeamMap == null)
+        {
+            mTeamMap = new HashMap<>();
+            mTeamMap.put(getString(R.string.utility_arsenal),R.drawable.arsenal);
+            mTeamMap.put(getString(R.string.utility_manchester),R.drawable.manchester_united);
+            mTeamMap.put(getString(R.string.utility_swansea),R.drawable.swansea_city_afc);
+            mTeamMap.put(getString(R.string.utility_leicester),R.drawable.leicester_city_fc_hd_logo);
+            mTeamMap.put(getString(R.string.utility_everton),R.drawable.everton_fc_logo1);
+            mTeamMap.put(getString(R.string.utility_westham),R.drawable.west_ham);
+            mTeamMap.put(getString(R.string.utility_tottenham),R.drawable.tottenham_hotspur);
+            mTeamMap.put(getString(R.string.utility_west_bromwich),R.drawable.west_bromwich_albion_hd_logo);
+            mTeamMap.put(getString(R.string.utility_sunderland),R.drawable.sunderland);
+            mTeamMap.put(getString(R.string.utility_stoke_city),R.drawable.stoke_city);
         }
+        if (teamname == null) {
+            return R.drawable.no_icon;
+        }
+
+        Integer result = mTeamMap.get(teamname);
+        if(result == null) return R.drawable.no_icon;
+        else return result;
+
     }
 }

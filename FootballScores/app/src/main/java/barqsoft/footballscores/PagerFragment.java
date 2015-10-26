@@ -41,7 +41,7 @@ public class PagerFragment extends Fragment
             viewFragments[i].setFragmentDate(mformat.format(fragmentdate));
         }
         mPagerHandler.setAdapter(mPagerAdapter);
-        mPagerHandler.setCurrentItem(MainActivity.current_fragment);
+        mPagerHandler.setCurrentItem(MainActivity.mCurrentFragment);
 
         // Update the widget
         // Setting the package ensures that only components in our app will receive the broadcast

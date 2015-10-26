@@ -15,7 +15,8 @@ import android.widget.TextView;
  */
 public class ScoreAdapter extends CursorAdapter
 {
-    private static final String FOOTBALL_SCORES_HASHTAG = "#Football_Scores";
+    private static final String FOOTBALL_SCORES_HASHTAG =
+            ScoresApplication.getAppContext().getResources().getString(R.string.share_hashtag);
 
     public static final int COL_HOME = 3;
     public static final int COL_AWAY = 4;
