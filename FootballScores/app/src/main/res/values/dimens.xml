@@ -14,5 +14,5 @@
     <dimen name="widget_detail_default_height">180dp</dimen>
     <dimen name="widget_detail_min_resize_width">220dp</dimen>
     <dimen name="widget_detail_min_resize_height">@dimen/widget_detail_default_height</dimen>
-
+    <dimen name="fragment_detail_share_button_padding">120dp</dimen>
 </resources>

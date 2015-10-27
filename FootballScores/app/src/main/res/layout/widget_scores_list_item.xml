@@ -46,7 +46,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/widget_away_text"
+        android:layout_toEndOf="@+id/widget_away_text"
         android:layout_toLeftOf="@+id/widget_score_layout"
+        android:layout_toStartOf="@+id/widget_score_layout"
         android:id="@+id/fillView" />
 
     <LinearLayout

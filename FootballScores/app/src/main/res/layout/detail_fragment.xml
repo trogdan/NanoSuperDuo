@@ -38,10 +38,11 @@
             android:contentDescription="@string/share_text"
             android:id="@+id/share_button"
             android:drawableLeft="@android:drawable/ic_menu_share"
-            android:paddingLeft="120dp"
-            android:paddingStart="120dp"
-            android:paddingRight="120dp"
-            android:paddingEnd="120dp"
+            android:drawableStart="@android:drawable/ic_menu_share"
+            android:paddingLeft="@dimen/fragment_detail_share_button_padding"
+            android:paddingStart="@dimen/fragment_detail_share_button_padding"
+            android:paddingRight="@dimen/fragment_detail_share_button_padding"
+            android:paddingEnd="@dimen/fragment_detail_share_button_padding"
             />
     </FrameLayout>
 
