@@ -122,7 +122,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 //functionality directly in this app.
                 // Hint: Use a Try/Catch block to handle the Intent dispatch gracefully, if you
                 // are using an external app.
-                //when you're done, remove the toast below.
                 SupportIntentIntegrator integrator = new SupportIntentIntegrator(mFragment);
                 integrator.addExtra("SCAN_WIDTH", 640);
                 integrator.addExtra("SCAN_HEIGHT", 480);

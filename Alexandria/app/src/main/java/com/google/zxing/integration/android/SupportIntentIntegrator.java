@@ -29,6 +29,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -36,6 +37,9 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+
+import it.jaschke.alexandria.R;
+import it.jaschke.alexandria.AlexandriaApplication;
 
 /**
  * <p>A utility class which helps ease integration with Barcode Scanner via {@link Intent}s. This is a simple
@@ -114,11 +118,11 @@ public class SupportIntentIntegrator {
     public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
     private static final String TAG = SupportIntentIntegrator.class.getSimpleName();
 
-    public static final String DEFAULT_TITLE = "Install Barcode Scanner?";
-    public static final String DEFAULT_MESSAGE =
-            "This application requires Barcode Scanner. Would you like to install it?";
-    public static final String DEFAULT_YES = "Yes";
-    public static final String DEFAULT_NO = "No";
+    public static final Context APP_CONTEXT = AlexandriaApplication.getAppContext();
+    public static final String DEFAULT_TITLE = APP_CONTEXT.getString(R.string.integrator_title);
+    public static final String DEFAULT_MESSAGE = APP_CONTEXT.getString(R.string.integrator_message);
+    public static final String DEFAULT_YES = APP_CONTEXT.getString(R.string.yes);
+    public static final String DEFAULT_NO = APP_CONTEXT.getString(R.string.no);
 
     private static final String BS_PACKAGE = "com.google.zxing.client.android";
     private static final String BSPLUS_PACKAGE = "com.srowen.bs.android";
